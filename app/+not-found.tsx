@@ -1,10 +1,12 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
-import { lightTheme } from '../src/constants/theme';
-
-const { colors } = lightTheme;
+import { getFontFamily } from '../src/utils/fonts';
+import { useTheme } from '../src/hooks/useTheme';
 
 export default function NotFound() {
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
+
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
@@ -23,12 +25,11 @@ export default function NotFound() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.background,
     padding: 24,
   },
   iconContainer: {
@@ -46,13 +47,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    fontFamily: 'PlusJakartaSans-Bold',
+    fontFamily: getFontFamily(700),
     color: colors.text,
     marginBottom: 12,
   },
   message: {
     fontSize: 16,
-    fontFamily: 'PlusJakartaSans-Regular',
+    fontFamily: getFontFamily(400),
     color: colors.textMutedForeground,
     textAlign: 'center',
     marginBottom: 32,
@@ -68,6 +69,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
-    fontFamily: 'PlusJakartaSans-Medium',
+    fontFamily: getFontFamily(500),
   },
 });

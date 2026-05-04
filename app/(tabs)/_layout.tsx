@@ -1,21 +1,28 @@
 // app/(tabs)/_layout.tsx
 import { Tabs } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { View, Text, StyleSheet, Platform } from 'react-native';
-import { lightTheme } from '../../src/constants/theme';
-
-const { colors } = lightTheme;
+import { View, Text, StyleSheet } from 'react-native';
+import { getFontFamily } from '../../src/utils/fonts';
+import { useTheme } from '../../src/hooks/useTheme';
 
 export default function TabsLayout() {
+  const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
+  const styles = getStyles(colors);
+  
   return (
     <View style={styles.container}>
       <Tabs screenOptions={{ 
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMutedForeground,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: {
+          ...styles.tabBar,
+          paddingBottom: insets.bottom || 16,
+        },
         tabBarItemStyle: styles.tabBarItem,
         tabBarLabelStyle: styles.tabBarLabel,
         tabBarShowLabel: true,
@@ -57,7 +64,7 @@ export default function TabsLayout() {
   );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -65,36 +72,33 @@ const styles = StyleSheet.create({
   tabBar: {
     position: 'absolute',
     width: '90%',
-    bottom: 30,
-    left: 20,
-    right: 20,
     height: 72,
-    marginLeft: 20,
     backgroundColor: colors.surface,
-    borderRadius: 20,
+    borderRadius: 24,
     borderTopWidth: 0,
     borderWidth: 1,
     borderColor: colors.border,
-    elevation: 10,
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 10 },
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
-    shadowRadius: 20,
+    shadowRadius: 12,
+    paddingTop: 12,
     paddingHorizontal: 10,
-    paddingBottom: Platform.OS === 'ios' ? 0 : 10, 
+    bottom: 25,
+    marginLeft: 20,
   },
   tabBarItem: {
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 10
   },
   tabBarLabel: {
     fontSize: 10,
     fontWeight: '700',
-    fontFamily: 'PlusJakartaSans-Medium',
+    fontFamily: getFontFamily(600),
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 1,
   },
   addIconContainer: {
     backgroundColor: colors.primary,

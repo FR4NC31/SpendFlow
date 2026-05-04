@@ -32,6 +32,9 @@ const dark = {
   border: "rgba(255,255,255,0.04)",
   divider: "rgba(255,255,255,0.02)",
   disabled: "#1E293B",
+
+  // Gradient
+  gradientColors: ["#3B82F6", "#6366F1", "#8B5CF6"],
 };
 
 // ☀️ LIGHT THEME
@@ -59,6 +62,9 @@ const light = {
   border: "rgba(0,0,0,0.04)",
   divider: "rgba(0,0,0,0.02)",
   disabled: "#F1F5F9",
+
+  // Gradient
+  gradientColors: ["#4f46e5", "#8b5cf6", "#e879f9"],
 };
 
 /* -----------------------------
