@@ -1,73 +1,9 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Feather from '@expo/vector-icons/Feather'
-import { COLOR_OPTIONS } from '../constants/theme'
 import { getFontFamily, getMonoFont } from '../utils/fonts'
 import { useTheme } from '../hooks/useTheme'
-
-export interface Transaction {
-  id: string
-  title: string
-  category: string
-  amount: number
-  type: 'income' | 'expense'
-  date: string
-  icon: string
-  color: string
-}
-
-const transactions: Transaction[] = [
-  {
-    id: '1',
-    title: 'Grocery Store',
-    category: 'Food',
-    amount: 85.50,
-    type: 'expense',
-    date: '2026-05-01',
-    icon: 'shopping-cart',
-    color: COLOR_OPTIONS.rose,
-  },
-  {
-    id: '2',
-    title: 'Salary Deposit',
-    category: 'Income',
-    amount: 3200.00,
-    type: 'income',
-    date: '2026-05-01',
-    icon: 'dollar-sign',
-    color: COLOR_OPTIONS.emerald,
-  },
-  {
-    id: '3',
-    title: 'Netflix Subscription',
-    category: 'Entertainment',
-    amount: 15.99,
-    type: 'expense',
-    date: '2026-04-30',
-    icon: 'tv',
-    color: COLOR_OPTIONS.violet,
-  },
-  {
-    id: '4',
-    title: 'Gas Station',
-    category: 'Transport',
-    amount: 45.00,
-    type: 'expense',
-    date: '2026-04-30',
-    icon: 'truck',
-    color: COLOR_OPTIONS.blue,
-  },
-  {
-    id: '5',
-    title: 'Freelance Payment',
-    category: 'Income',
-    amount: 850.00,
-    type: 'income',
-    date: '2026-04-29',
-    icon: 'briefcase',
-    color: COLOR_OPTIONS.emerald,
-  },
-]
+import { useTransactionsStore, Transaction } from '../store/transactions.store'
 
 const formatCurrency = (amount: number) => {
   return `₱${amount.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -104,6 +40,7 @@ const TransactionItem = ({ item, colors }: { item: Transaction; colors: any }) =
 
 export default function RecentTransactions() {
   const { colors } = useTheme()
+  const transactions = useTransactionsStore((state) => state.transactions)
 
   return (
     <View style={[styles.container, { backgroundColor: colors.surface, borderColor: colors.border }]}>
@@ -113,11 +50,11 @@ export default function RecentTransactions() {
           <Text style={[styles.headerButtonText, { color: colors.secondary }]}>See All</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.listContainer}>
-        {transactions.map((item) => (
+      <ScrollView style={styles.listContainer} showsVerticalScrollIndicator={false}>
+        {transactions.map((item: Transaction) => (
           <TransactionItem key={item.id} item={item} colors={colors} />
         ))}
-      </View>
+      </ScrollView>
     </View>
   )
 }
@@ -127,7 +64,6 @@ const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     marginTop: 20,
-    minHeight: 400,
     borderRadius: 20,
     paddingHorizontal: 20,
     paddingVertical: 18,
@@ -148,7 +84,7 @@ const styles = StyleSheet.create({
     fontFamily: getFontFamily(700),
   },
   listContainer: {
-    flex: 1,
+    minHeight: 150,
   },
   transactionItem: {
     flexDirection: 'row',
