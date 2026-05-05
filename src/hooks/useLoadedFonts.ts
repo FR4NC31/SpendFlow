@@ -14,7 +14,7 @@ export function useLoadedFonts() {
     'JetBrainsMono-Bold': require('../../assets/fonts/monospace/JetBrainsMono-Bold.ttf'),
     'JetBrainsMono-Light': require('../../assets/fonts/monospace/JetBrainsMono-Light.ttf'),
     'JetBrainsMono-ExtraBold': require('../../assets/fonts/monospace/JetBrainsMono-ExtraBold.ttf'),
-  }, { enableVectorIcons: false });
+  });
 
   return { fontsLoaded, error };
 }

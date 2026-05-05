@@ -1,5 +1,5 @@
 // app/(tabs)/index.tsx
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { typography } from '../../src/constants/theme';
 import { getFontFamily } from '../../src/utils/fonts';
 import { useTheme } from '../../src/hooks/useTheme';
@@ -16,8 +16,14 @@ export default function Dashboard() {
         <Text style={styles.title}>Welcome back,</Text>
         <Text style={styles.subtitle}>John Doe 👋</Text>
       </View>
-      <AvailableBalance />
-      <RecentTransactions />
+      <ScrollView 
+        style={styles.content} 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
+        <AvailableBalance />
+        <RecentTransactions />
+      </ScrollView>
     </View>
   );
 }
@@ -26,11 +32,16 @@ const getStyles = (colors: any) => StyleSheet.create({
     container: {
       flex: 1,
       paddingVertical: 50,
-      paddingBottom: 100,
       backgroundColor: colors.background,
     },
     header: {
       paddingHorizontal: 20,
+    },
+    content: {
+      flex: 1,
+    },
+    scrollContent: {
+      paddingBottom: 70,
     },
     title: {
       fontSize: typography.body,
