@@ -2,8 +2,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import Feather from '@expo/vector-icons/Feather'
 import { LinearGradient } from 'expo-linear-gradient'
-import { getFontFamily, getMonoFont } from '../utils/fonts'
 import { useTheme } from '../hooks/useTheme'
+import { getFontFamily, getMonoFont } from '../utils/fonts'
 import { useTransactionsStore } from '../store/transactions.store'
 
 const formatCurrency = (amount: number) => {
@@ -14,7 +14,7 @@ const formatCurrency = (amount: number) => {
 }
 
 export default function AvailableBalance() {
-  const { colors, mode } = useTheme()
+  const { colors } = useTheme()
   const transactions = useTransactionsStore((state) => state.transactions)
   const [showBalance, setShowBalance] = useState(true)
 
@@ -26,12 +26,7 @@ export default function AvailableBalance() {
     .reduce((sum, t) => sum + t.amount, 0)
   const balance = income - expense
 
-  const spentPercent = income > 0 ? Math.min((expense / income) * 100, 100) : 0
-  const remaining = Math.max(0, income - expense)
-
-  const gradientColors: [string, string, string] = mode === 'dark'
-    ? ['#1E1B4B', '#312E81', '#4C1D95']
-    : ['#4F46E5', '#6366F1', '#818CF8']
+  const gradientColors: [string, string, string] = ['#1E1B4B', '#312E81', '#4C1D95']
 
   return (
     <View style={styles.container}>
@@ -67,51 +62,6 @@ export default function AvailableBalance() {
           {showBalance ? formatCurrency(balance) : '••••••••'}
         </Text>
       </LinearGradient>
-
-      <View style={[styles.statsCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-        <View style={styles.statsHeader}>
-          <View style={styles.statsTitleRow}>
-            <View style={[styles.statsIconBox, { backgroundColor: `${colors.primary}15` }]}>
-              <Feather name="pie-chart" size={16} color={colors.primary} />
-            </View>
-            <Text style={[styles.statsTitle, { color: colors.text }]}>Monthly Overview</Text>
-          </View>
-        </View>
-
-        <View style={styles.statsGrid}>
-          <View style={styles.statsItem}>
-            <Text style={[styles.statsItemLabel, { color: colors.textMutedForeground }]}>Income</Text>
-            <Text style={[styles.statsItemValue, { color: colors.income }]}>{formatCurrency(income)}</Text>
-          </View>
-          <View style={styles.statsItem}>
-            <Text style={[styles.statsItemLabel, { color: colors.textMutedForeground }]}>Spent</Text>
-            <Text style={[styles.statsItemValue, { color: spentPercent > 80 ? colors.expense : colors.text }]}>{formatCurrency(expense)}</Text>
-          </View>
-        </View>
-
-        <View style={styles.savingsSection}>
-          <View style={styles.savingsRow}>
-            <View style={styles.savingsLeft}>
-              <Feather name="dollar-sign" size={16} color={colors.income} />
-              <Text style={[styles.savingsLabel, { color: colors.textMutedForeground }]}>Savings</Text>
-            </View>
-            <Text style={[styles.savingsValue, { color: colors.income }]}>{formatCurrency(remaining)}</Text>
-          </View>
-          <View style={styles.progressContainer}>
-            <View style={[styles.progressBar, { backgroundColor: colors.border }]}>
-              <View
-                style={[
-                  styles.progressFill,
-                  { 
-                    width: `${100 - spentPercent}%`, 
-                    backgroundColor: colors.income,
-                  },
-                ]}
-              />
-            </View>
-          </View>
-        </View>
-      </View>
     </View>
   )
 }
@@ -177,128 +127,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginTop: 16,
     letterSpacing: -1,
-  },
-
-  statsCard: {
-    width: '100%',
-    padding: 20,
-    borderRadius: 20,
-    borderWidth: 1,
-    marginTop: 16,
-  },
-
-  statsHeader: {
-    marginBottom: 20,
-  },
-
-  statsTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-
-  statsIconBox: {
-    width: 32,
-    height: 32,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  statsTitle: {
-    fontSize: 15,
-    fontFamily: getFontFamily(600),
-  },
-
-  statsGrid: {
-    flexDirection: 'row',
-    marginBottom: 20,
-  },
-
-  statsItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-
-  statsItemLabel: {
-    fontSize: 11,
-    fontFamily: getFontFamily(500),
-    marginBottom: 6,
-  },
-
-  statsItemValue: {
-    fontSize: 17,
-    fontFamily: getMonoFont(700),
-  },
-
-  progressContainer: {
-    marginTop: 4,
-  },
-
-  progressBar: {
-    height: 8,
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-
-  progressFill: {
-    height: '100%',
-    borderRadius: 4,
-  },
-
-  progressFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-
-  progressText: {
-    fontSize: 12,
-    fontFamily: getFontFamily(500),
-  },
-
-  savingsSection: {
-    marginTop: 16,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255,255,255,0.08)',
-  },
-
-  savingsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-
-  savingsLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-
-  savingsLabel: {
-    fontSize: 13,
-    fontFamily: getFontFamily(500),
-  },
-
-  savingsValue: {
-    fontSize: 18,
-    fontFamily: getMonoFont(700),
-  },
-
-  warningBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
-  },
-
-  warningText: {
-    fontSize: 11,
-    fontFamily: getFontFamily(600),
   },
 })

@@ -6,10 +6,16 @@ import { COLOR_OPTIONS, typography } from '../../src/constants/theme'
 import { Feather, Octicons, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../../src/hooks/useTheme'
+import { useRouter, Href } from 'expo-router'
+import { logout } from '../../src/utils/auth'
+import { useAuthStore } from '@/store/auth.store'
 
 export default function Profile() {
   const { colors, mode, toggleTheme } = useTheme()
   const styles = getStyles(colors)
+  const { user } = useAuthStore()
+
+  const router = useRouter()
 
   return (
     <>
@@ -31,8 +37,8 @@ export default function Profile() {
               </LinearGradient>
             </View>
             <View style={styles.ProfileText}>
-              <Text style={styles.ProfileName}>John Doe</Text>
-              <Text style={styles.ProfileEmail}>johndoe123@gmail.com</Text>
+              <Text style={styles.ProfileName}>{user?.name || 'User'}</Text>
+              <Text style={styles.ProfileEmail}>{user?.email || 'No email'}</Text>
             </View>
           </View>
         </View>
@@ -117,7 +123,12 @@ export default function Profile() {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={[styles.LogoutBtn, {backgroundColor: `${colors.expense}20`}]}>
+        <TouchableOpacity onPress={async () => {
+          console.log('[Profile] Logout button pressed');
+          await logout();
+          console.log('[Profile] Navigating to LoginScreen...');
+          router.replace('/auth/LoginScreen');
+        }} style={[styles.LogoutBtn, {backgroundColor: `${colors.expense}20`}]}>
           <MaterialIcons name="logout" size={24} color={colors.expense} />
           <Text style={styles.LogoutBtnText}>Logout</Text>
         </TouchableOpacity>
